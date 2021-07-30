@@ -1,11 +1,6 @@
 const { Pool } = require('pg');
 const pool = new Pool();
 
-const dbConnect = require('../db/db.config')
-
-
-dbConnect._db_connect();
-
 const Person = require('../entity/person');
 let person = new Person('Nikolay', 'Pleshkov', 19, 'icelol@abv.bg', '645312niki');
 
@@ -37,6 +32,9 @@ async function getPerson(personID){
         console.log(`Error: ${e} at function getPerson(args)`);
     }
 }
+
+
+
 
 (async () => {
     try{
