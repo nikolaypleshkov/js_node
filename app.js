@@ -136,5 +136,5 @@ const getData = $all.getData();
 app.get('/' , (req, res) => {
     res.send($all.getData());
 });
-
+ 
 app.listen(5000);
