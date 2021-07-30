@@ -1,6 +1,8 @@
 const { Client, Pool } = require('pg');
 const pool = new Pool();
 const path = process.env.USER;
+const Person = require('../entity/person');
+const person = new Person('Mario', 'Pleshkov', 13, 'mariopleshkov21@abv.bg');
 
 const client = new Client({
     user: 'pleshkov',
@@ -11,15 +13,6 @@ const client = new Client({
 });
 
 client.connect();
-
-client.query(`SELECT * FROM person`, (err, res) => {
-    if(!err){
-        console.log(res.rows);
-    }
-    else{
-        console.log(err.message);
-    }
-});
 
 async function registerPerson(person){
     try{
@@ -39,6 +32,26 @@ async function registerPerson(person){
 
 }
 
+registerPerson({
+    _fname: 'Nikolay',
+    _lname: 'Pleshkov',
+    _age: 19,
+    _email: 'icelol@abv.bg',
+    _pass: '5234123',
+});
+
+client.query(`SELECT * FROM person`, (err, res) => {
+    if(!err){
+        console.log(res.rows);
+    }
+    else{
+        console.log(err.message);
+    }
+    client.end();
+});
+
+
+
 async function getPerson(personID){
     try{
         const qry = `SELECT * FROM person WHERE id = $1`;
@@ -50,27 +63,27 @@ async function getPerson(personID){
     }
 }
 
-(async () => {
-    try{
-        const result = await registerPerson({
-            _fname: 'Nikolay',
-            _lname: 'Pleshkov',
-            _age: 19,
-            _email: 'icelol@abv.bg',
-            _pass: '5234123',
-        });
-        const personID = result.rows[0]["id"];
+// (async () => {
+//     try{
+//         const result = await registerPerson({
+//             _fname: 'Nikolay',
+//             _lname: 'Pleshkov',
+//             _age: 19,
+//             _email: 'icelol@abv.bg',
+//             _pass: '5234123',
+//         });
+//         const personID = result.rows[0]["id"];
     
-        const getPersonResult = await getPerson(personID);
-        console.log(
-            `result from SELECT query for person: ${personID}: ${JSON.stringify(result.rows[0], null, " ")}`
-        );
-        client.end()
+//         const getPersonResult = await getPerson(personID);
+//         console.log(
+//             `result from SELECT query for person: ${personID}: ${JSON.stringify(result.rows[0], null, " ")}`
+//         );
+//         client.end()
 
-    }
-    catch(e){
-        console.log(`Error: ${e} at async function(){...}`);
-    }
-})();
+//     }
+//     catch(e){
+//         console.log(`Error: ${e} at async function(){...}`);
+//     }
+// })();
 
 
